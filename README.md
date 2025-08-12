@@ -1,7 +1,8 @@
 <h1 align="center">
-  <b style="font-family: 'Segoe UI', sans-serif;>LearnTree</b><br>
+  <b>🌱 LearnTree</b><br>
   <sub>Smart. Simple. Superfast Learning.</sub>
 </h1>
+
 
 **LearnTree** is a modern, AI-powered learning platform designed to simplify and supercharge student revision. Built for today’s learners, it combines speed, clarity, and intelligence to help you understand concepts quickly and retain them effectively.
 
