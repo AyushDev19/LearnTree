@@ -1,4 +1,4 @@
-# 🌱 LearnTree
+# LearnTree
 
 **LearnTree** is a modern, AI-powered learning platform designed to simplify and supercharge student revision. Built for today’s learners, it combines speed, clarity, and intelligence to help you understand concepts quickly and retain them effectively.
 
