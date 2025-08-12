@@ -1,6 +1,6 @@
 <h1 align="center">
-  <b>🌱 LearnTree</b><br>
-  <sub>Smart. Simple. Superfast Learning.</sub>
+  <b> LearnTree</b><br>
+  <sub>Plant knowledge, watch your mind grow!</sub>
 </h1>
 
 
