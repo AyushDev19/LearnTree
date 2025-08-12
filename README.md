@@ -1,5 +1,5 @@
 <h1 align="center">
-  <b>LearnTree</b><br>
+  <b style="font-family: 'Segoe UI', sans-serif;>LearnTree</b><br>
   <sub>Smart. Simple. Superfast Learning.</sub>
 </h1>
 
