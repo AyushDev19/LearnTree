@@ -1,0 +1,310 @@
+/* ===================== GLOBAL STYLES ===================== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  color: white;
+  letter-spacing: 0.4px;
+  font-family: "Poppins", sans-serif;
+
+  font-weight: 300;
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff50 #0d1b2a;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1b2a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffffff40;
+  border-radius: 10px;
+  border: 2px solid #002647;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff70;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(145deg, #0d1b2a, #1a2b4c);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* ===================== HEADER ===================== */
+header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #ffffff20;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px 12px 0 0;
+}
+
+header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.back-arrow {
+  font-size: 30px;
+  text-decoration: none;
+  width: 40px;
+  padding-top: 0;
+  text-align: center;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.back-arrow:hover {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+}
+
+/* ===================== MAIN ===================== */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 0 12px 12px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+section {
+  width: 100%;
+  max-width: 1000px;
+  padding: 3rem 2rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #ffffff20;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+section h1 {
+  font-size: 32px;
+  margin-bottom: 1rem;
+  background: none;
+}
+
+section h2 {
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 1rem;
+  background: none;
+  color: #bfc8d8;
+}
+
+.description,
+section h3,
+section p {
+  font-size: 16px;
+  max-width: 700px;
+  margin-top: 1rem;
+  line-height: 1.8;
+  color: #e0e0e0;
+  background: none;
+}
+
+/* ===================== FEATURE LIST ===================== */
+.feature-list {
+  list-style: none;
+  width: 80%;
+  margin-top: 2rem;
+}
+
+.feature-list li {
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-list li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.feature-list li h3 {
+  font-size: 20px;
+  margin-bottom: 0.5rem;
+}
+
+.feature-list li p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #dddddd;
+}
+
+/* ===================== BUTTON ===================== */
+.nice {
+  width: 220px;
+  height: 55px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  margin-top: 20px;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nice::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-25deg);
+  transition: all 0.5s;
+}
+
+.nice:hover::before {
+  left: 125%;
+}
+
+.nice:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+/* ===================== FORM ===================== */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 2rem;
+  background: none;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  outline: none;
+  color: white;
+  resize: none;
+}
+
+form textarea {
+  height: 150px;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+  color: #ccc;
+}
+
+form button {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+  width: 100%;
+  height: 70px;
+  background-color: rgba(0, 19, 35, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  border-top: 1px solid #ffffff20;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.25);
+}
+#loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 2rem;
+  height: 70vh;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .logo {
+    font-size: 22px;
+  }
+
+  section h1 {
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .nice {
+    width: 90%;
+    max-width: 300px;
+  }
+  .feature-list {
+    width: 100%;
+  }
+
+  form input,
+  form textarea,
+  form button {
+    width: 90%;
+  }
+}

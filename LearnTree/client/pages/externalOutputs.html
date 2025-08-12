@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnTree | External Sources</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0d1b2a;
+            color: #f8f9fa;
+        }
+
+        header.feynman-header h1 {
+            padding: 1rem;
+            text-align: center;
+        }
+
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #20c997;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #result {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #10263f;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 255, 200, 0.2);
+        }
+
+        #yt-links {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .yt-link {
+            display: block;
+            background: #143d56;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #20c997;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 255, 200, 0.1);
+        }
+
+        .yt-link:hover {
+            background: #1c4f6b;
+            color: #38d9a9;
+            box-shadow: 0 4px 12px rgba(0, 255, 200, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="javascript:history.back()" class="back-arrow" title="Go back"></a>
+        <h1 class="logo" style="margin-left: 1rem; font-size: 24px;">LearnTree</h1>
+    </header>
+
+    <div id="loader">
+        <p id="loader-text">Loading external sources...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <section id="result" class="feynman-result" style="display: none;">
+        <h2 style="text-align:center;">External Sources:</h2>
+        <div id="yt-links"></div>
+    </section>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const topic = params.get("topic");
+        const class_ = params.get("class");
+        const board = params.get("board");
+
+        async function fetchYouTubeLinks() {
+            try {
+                const res = await fetch(`http://127.0.0.1:5000/ytlink?topic=${encodeURIComponent(topic)}&class=${encodeURIComponent(class_)}&board=${encodeURIComponent(board)}`);
+                if (!res.ok) throw new Error("Failed to fetch YouTube links");
+
+                const links = await res.json();
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("result").style.display = "block";
+
+                const ytList = document.getElementById("yt-links");
+
+                if (links.length === 0) {
+                    ytList.innerHTML = "<p style='color: #ccc;'>No videos found.</p>";
+                    return;
+                }
+
+                links.forEach(link => {
+                    const a = document.createElement("a");
+                    a.href = link;
+                    a.target = "_blank";
+                    a.rel = "noopener noreferrer";
+                    a.textContent = link;
+                    a.className = "yt-link";
+                    ytList.appendChild(a);
+                });
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById("loader-text").textContent = "Error loading videos.";
+            }
+        }
+
+        fetchYouTubeLinks();
+    </script>
+
+</body>
+
+</html>

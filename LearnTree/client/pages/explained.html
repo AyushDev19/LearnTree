@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnTree Document</title>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0d1b2a;
+            color: #f8f9fa;
+        }
+
+        header h1 {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        #loader {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-top: 2rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #20c997;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .output-container {
+            position: relative;
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+
+        .cool-textarea {
+            width: 100%;
+            background: #0d1b2a;
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #20c997;
+            font-size: 16px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            transition: all 1s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 255, 200, 0.2);
+        }
+
+        .action-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #20c997;
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: #17a589;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="javascript:history.back()" class="back-arrow" title="Go back"></a>
+        <h1 class="logo" style="margin-left: 1rem; font-size: 24px;">LearnTree</h1>
+    </header>
+
+    <div id="loader">
+        <p id="loader-text">Loading explanation...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="result" style="display: none;">
+        <div class="output-container">
+            <div id="pdf-content" class="cool-textarea"></div>
+            <div class="action-buttons">
+                <button class="btn" id="copy-btn">📋 Copy</button>
+                <button class="btn" id="download-btn">⬇ Download</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const payload = {
+            name: params.get("name"),
+            topic: params.get("topic"),
+            class: params.get("class"),
+            board: params.get("board")
+        };
+
+        function convertBold(text) {
+            const mathMatches = [];
+            text = text.replace(/\$(.*?)\$/g, (match) => {
+                mathMatches.push(match);
+                return `__MATH_${mathMatches.length - 1}__`;
+            });
+            text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            text = text.replace(/__MATH_(\d+)__/g, (_, index) => mathMatches[+index]);
+            return text;
+        }
+
+        async function sendValue(data) {
+            const loader = document.getElementById("loader");
+            const resultDiv = document.getElementById("result");
+            const outputText = document.getElementById("pdf-content");
+            const loaderText = document.getElementById("loader-text");
+            const loadingMessages = ["Loading explanation...", "It might take around a minute..."];
+            let msgIndex = 0;
+
+            const interval = setInterval(() => {
+                msgIndex = (msgIndex + 1) % loadingMessages.length;
+                loaderText.textContent = loadingMessages[msgIndex];
+            }, 2000);
+
+            try {
+                loader.style.display = "flex";
+                resultDiv.style.display = "none";
+
+                const res = await fetch("http://127.0.0.1:5000/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+
+                loader.style.display = "none";
+                resultDiv.style.display = "block";
+                clearInterval(interval);
+                outputText.innerHTML = convertBold(result.txt);
+            } catch (err) {
+                loader.style.display = "none";
+                resultDiv.style.display = "block";
+                clearInterval(interval);
+                outputText.innerHTML = "❌ Error fetching data.";
+                console.error(err);
+            }
+        }
+
+        sendValue(payload);
+
+        document.getElementById("copy-btn").addEventListener("click", () => {
+            const text = document.getElementById("pdf-content").innerText;
+            navigator.clipboard.writeText(text)
+                .then(() => alert("Copied to clipboard!"))
+                .catch(err => console.error("Copy failed:", err));
+        });
+
+        document.getElementById("download-btn").addEventListener("click", async () => {
+            const { jsPDF } = window.jspdf;
+            const content = document.getElementById("pdf-content");
+
+            const canvas = await html2canvas(content, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: null
+            });
+
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save("document.pdf");
+        });
+    </script>
+</body>
+
+</html>
