@@ -55,7 +55,7 @@ npm install electron
 npm start
 ```
 The Electron frontend will launch as a desktop app.
-
+<br><br>
 Made with ❤️ by Ayush and John!
 
 #### LearnTree — Plant a concept. Grow your mind.
