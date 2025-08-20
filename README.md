@@ -38,7 +38,7 @@ Tired of scattered notes, clunky apps, and ineffective revision? LearnTree bring
 
 ### 🧪 Getting Started
 
-#### Initialize the Backend Server
+#### Step 1: Initialize the Backend Server
 
 Make sure you have Python 3.7+ installed.
 
@@ -47,7 +47,7 @@ cd server
 python main.py
 ```
 This will start the backend server required for AI and TTS features.
-#### Launch the Electron App
+#### Step 2: Launch the Electron App
 
 ```bash
 cd client
