@@ -5,6 +5,8 @@ import os
 from google import genai
 import edge_tts
 from googleapiclient.discovery import build
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 CORS(app)
@@ -13,10 +15,42 @@ GEMINI_API_KEY = "AIzaSyBc70X28NtqrbzEpkz6uKcbLfXgDZ1Sixs"
 YOUTUBE_API_KEY = "AIzaSyAwoGu3XgUVmIPtl2ZGlR1ZoJR-veqEUD4"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
-
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+EMAIL_ADDRESS = "ayush25.dev@gmail.com"
+EMAIL_PASSWORD = "sogb bsll ffaf qsfz"
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 AUDIO_FILE = os.path.join(UPLOAD_FOLDER, "latest.mp3")
+@app.route("/send-email", methods=["POST"])
+def send_email():
+    data = request.get_json()
+    name = data.get("name")
+    from_email = data.get("email")
+    message = data.get("message")
+
+    if not name or not from_email or not message:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    subject = f"Message from {name}"
+    body = f"Sender Email: {from_email}\n\nMessage:\n{message}"
+
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = from_email
+    msg["To"] = "ayush25.dev@gmail.com"
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_ADDRESS, msg["To"], msg.as_string())
+
+        return jsonify({"message": "Email sent successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 def youtube_search(query):
     youtube_set = []
     youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
@@ -133,4 +167,5 @@ def generate():
 if __name__ == "__main__":
     print("Flask server running at http://127.0.0.1:5000")
     app.run(debug=True)
+
 
