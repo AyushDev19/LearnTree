@@ -56,11 +56,11 @@
 
         <section id="contact">
             <h1>Contact Us</h1>
-            <form>
-                <input type="text" placeholder="Enter your name...">
-                <input type="email" placeholder="Enter your email...">
-                <textarea placeholder="Enter your feedback/question/complain..."></textarea>
-                <button class="nice">Submit</button>
+            <form id="contact-form">
+                <input type=" text" id="name" placeholder="Enter your name..." required>
+                <input type="email" id="email" placeholder="Enter your email..." required>
+                <textarea id="message" placeholder="Enter your feedback/question/complain..." required></textarea>
+                <button class="nice" type="submit">Submit</button>
             </form>
         </section>
     </main>
@@ -69,11 +69,49 @@
         &copy; LearnTree Inc.
     </footer>
 
+   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         function Options() {
             window.location.href = "pages/options.html"
         }
+
+        document.getElementById('contact-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !message) {
+                alert('Please fill all the fields.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, message })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                    this.reset();
+                } else {
+                    alert('Failed to send message: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error sending message: ' + error.message);
+            }
+        });
     </script>
+
+
 </body>
+
 
 </html>
