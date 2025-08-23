@@ -17,8 +17,8 @@ YOUTUBE_API_KEY = "AIzaSyAwoGu3XgUVmIPtl2ZGlR1ZoJR-veqEUD4"
 client = genai.Client(api_key=GEMINI_API_KEY)
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-EMAIL_ADDRESS = "ayush25.dev@gmail.com"
-EMAIL_PASSWORD = "sogb bsll ffaf qsfz"
+EMAIL_ADDRESS = "learntreeai@gmail.com"
+EMAIL_PASSWORD = "John@12345"
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 AUDIO_FILE = os.path.join(UPLOAD_FOLDER, "latest.mp3")
@@ -38,17 +38,15 @@ def send_email():
     msg = MIMEText(body)
     msg["Subject"] = subject
     msg["From"] = from_email
-    msg["To"] = "ayush25.dev@gmail.com"
+    msg["To"] = EMAIL_ADDRESS
 
-    try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-            server.sendmail(EMAIL_ADDRESS, msg["To"], msg.as_string())
+    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        server.starttls()
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_ADDRESS, msg["To"], msg.as_string())
 
-        return jsonify({"message": "Email sent successfully"})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"message": "Email sent successfully"})
+
 
 
 def youtube_search(query):
@@ -114,15 +112,13 @@ def generate_explanation(name, class_, topic, board):
 
 
 async def text_to_speech(text, output_path):
-    """Convert text to speech and save as MP3."""
-    voice = "hi-IN-MadhurNeural"
+    voice = "en-GB-RyanNeural"
     communicate = edge_tts.Communicate(text=text, voice=voice)
     await communicate.save(output_path)
 
 
 @app.route("/generate_audio", methods=["POST"])
 def generate_audio_post():
-    """Generate Feynman explanation from JSON POST and return audio file."""
     data = request.get_json()
     name = data.get("name")
     topic = data.get("topic")
@@ -145,7 +141,6 @@ def generate_audio_post():
 
 @app.route("/audio")
 def get_audio():
-    """Serve the latest audio file."""
     if os.path.exists(AUDIO_FILE):
         return send_file(AUDIO_FILE, mimetype="audio/mpeg")
     return "No audio found", 404
@@ -153,7 +148,6 @@ def get_audio():
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    """Generate a detailed HTML-friendly explanation."""
     data = request.get_json()
     name = data.get("name")
     topic = data.get("topic")
@@ -165,7 +159,5 @@ def generate():
 
 
 if __name__ == "__main__":
-    print("Flask server running at http://127.0.0.1:5000")
+    print("Server initiated!")
     app.run(debug=True)
-
-
